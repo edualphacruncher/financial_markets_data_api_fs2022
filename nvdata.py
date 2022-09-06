@@ -1,11 +1,15 @@
 import pandas as pd
+
+import datetime
+from dateutil.parser import parse
+from typing import Union
+
 from load.helpers import parse_yaml
 from load.load_equities import load_equity
-import datetime as dt
 
 config_dict = parse_yaml('config.yml')
 
-def get(ticker:str or list, universe:str, date_start:str or datetime.date, date_end:str or datetime.date, **kwargs):
+def get(ticker:Union[str, list], universe:str, date_start:Union[str, datetime.date] = '1980-01-01', date_end:Union[str, datetime.date] = '2020-06-30', **kwargs):
     """
     The function returns the desired data for the given ticker, from a given universe.
     The ticker can be given as a string, or a list of strings. If invalid ticker
@@ -27,26 +31,17 @@ def get(ticker:str or list, universe:str, date_start:str or datetime.date, date_
         try:
             universe_route = config_dict[universe]
         except KeyError:
-            print('Please use existing universe!')
-            return None
+            raise ValueError(f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}")
     else:
-        print('Please enter the ticker(s) as a string or list of strings!')
-        return None
+        raise TypeError('Invalid ticker type. Please enter the ticker(s) as a string or list of strings!')
+ 
 
     if isinstance(date_start, str):
-        try:
-            date_start = dt.datetime.strptime(date_start,'%Y-%m-%d').date()
-        except ValueError:
-            print('Please use datetime.date or the YYYY-MM-DD format for dates')
-            return None
+        date_start = parse(date_start).date()
 
     if isinstance(date_end, str):
-        try:
-            date_end = dt.datetime.strptime(date_end,'%Y-%m-%d').date()
-        except ValueError:
-            print('Please use datetime.date or the YYYY-MM-DD format for dates')
-            return None
+        date_end = parse(date_end).date()
 
-    if isinstance(date_start, dt.date) and isinstance(date_end, dt.date):
+    if isinstance(date_start, datetime.date) and isinstance(date_end, datetime.date):
             ret_df = load_equity(ticker, universe_route, date_start, date_end)
             return ret_df

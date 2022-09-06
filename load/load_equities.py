@@ -1,6 +1,9 @@
 import pandas as pd
+import datetime
+from typing import Union
 
-def load_equity(ticker:list, universe_path:str, date_start, date_end):
+
+def load_equity(ticker:list, universe_path:str, date_start:Union[str, datetime.date], date_end:Union[str, datetime.date]):
     """
     Equity loading function that reads the data from files and returns them in
     a standard format. Ticker can be a string or a list of strings.
