@@ -7,16 +7,29 @@ from typing import Union
 from load.helpers import parse_yaml
 from load.load_equities import load_equity
 
-config_dict = parse_yaml('config.yml')
+config_dict = parse_yaml("config.yml")
 
-def get(ticker:Union[str, list], universe:str, date_start:Union[str, datetime.date] = '1980-01-01', date_end:Union[str, datetime.date] = '2020-06-30', **kwargs):
+
+def get(
+    ticker: Union[str, list],
+    universe: str,
+    frequency: str = "daily",
+    date_start: Union[str, datetime.date] = "1980-01-01",
+    date_end: Union[str, datetime.date] = "2020-06-30",
+    **kwargs,
+):
     """
     The function returns the desired data for the given ticker, from a given universe.
     The ticker can be given as a string, or a list of strings. If invalid ticker
-    is entered, the function will return and empty dataframe. The start and end
-    dates should be specified as datetime.date objects or in a string format
-    like '2020-01-01'.
-    
+    is entered, the function will return and empty dataframe.
+
+    Frequency of the data can be specified by the frequency parameter, by default
+    daily data is returned. Other possible frequencies are weekly, monthly,
+    quarterly and yearly.
+
+    The start and end dates should be specified as datetime.date objects or in a
+    string format like '2020-01-01'.
+
     List of available universe and returned data formats:
         * equities: pandas dataframe with the following columns:
             * date
@@ -31,10 +44,13 @@ def get(ticker:Union[str, list], universe:str, date_start:Union[str, datetime.da
         try:
             universe_route = config_dict[universe]
         except KeyError:
-            raise ValueError(f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}")
+            raise ValueError(
+                f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}"
+            )
     else:
-        raise TypeError('Invalid ticker type. Please enter the ticker(s) as a string or list of strings!')
- 
+        raise TypeError(
+            "Invalid ticker type. Please enter the ticker(s) as a string or list of strings!"
+        )
 
     if isinstance(date_start, str):
         date_start = parse(date_start).date()
@@ -43,5 +59,5 @@ def get(ticker:Union[str, list], universe:str, date_start:Union[str, datetime.da
         date_end = parse(date_end).date()
 
     if isinstance(date_start, datetime.date) and isinstance(date_end, datetime.date):
-            ret_df = load_equity(ticker, universe_route, date_start, date_end)
-            return ret_df
+        ret_df = load_equity(ticker, universe_route, frequency, date_start, date_end)
+        return ret_df
