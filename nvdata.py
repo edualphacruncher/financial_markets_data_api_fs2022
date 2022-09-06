@@ -6,6 +6,7 @@ from typing import Union
 
 from load.helpers import parse_yaml
 from load.load_equities import load_equity
+from load.load_factors import load_factor
 
 config_dict = parse_yaml("config.yml")
 
@@ -38,6 +39,10 @@ def get(
             * market_cap
             * total_return
             price and market_cap are denominated in USD
+        * factors: pandas dataframe with the following columns
+            * date
+            * ticker
+            * value
     """
 
     if isinstance(ticker, str) or isinstance(ticker, list):
@@ -59,5 +64,13 @@ def get(
         date_end = parse(date_end).date()
 
     if isinstance(date_start, datetime.date) and isinstance(date_end, datetime.date):
-        ret_df = load_equity(ticker, universe_route, frequency, date_start, date_end)
+        if universe == "equities":
+            ret_df = load_equity(
+                ticker, universe_route, frequency, date_start, date_end
+            )
+        elif universe == "factors":
+            ret_df = load_factor(
+                ticker, universe_route, frequency, date_start, date_end
+            )
+
         return ret_df
