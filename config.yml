@@ -1,0 +1,3 @@
+equities : ../data/us_equity.feather
+factors : ../data/us_factor.feather
+indices : ../data/us_index.feather
