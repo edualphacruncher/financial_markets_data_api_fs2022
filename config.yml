@@ -1,3 +1,3 @@
-equities : ../edx-data/upload/us_equity_filt.feather
-factors : ../edx-data/upload/us_factor.feather
-indices : ../edx-data/upload/us_index.feather
+equities : ../data/us_equity.feather
+factors : ../data/us_factor.feather
+indices : ../data/us_index.feather

@@ -35,9 +35,14 @@ The get function has 5 parameters:
 * date_end.
 
 The ticker can be a string or a list of strings that exist in the given universe. In case the ticker does not exist, the function will return an empty dataframe.
+
 The universe should be selected from the above presented list and entered as a string.
+
 The frequency can vary from daily to yearly in different sequences based on the universe. For more details see the error message if wrong frequency is entered. By default the frequency is set daily.
+
 Date_start and date_end corresponds to the range in between the data is required. It can be a datetime.date or string format. If the database contains no avaialable data for the given period, an empty dataframe is returned.
+
+The config file contains the source of the data files that contains all info about a universe. By default that folder is in the same hieararcy level as the working folder and called *data*. In case the user wants to specify otherwise, changes in the config file are required.
 
 Example code:
 ```
