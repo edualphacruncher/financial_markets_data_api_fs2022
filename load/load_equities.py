@@ -28,7 +28,7 @@ def load_equity(
         & (eq_univ.currency == "USD")
     ]
 
-    eq_df_filt = eq_df_filt.drop(columns=["name", "frequency", "currency"])
+    eq_df_filt = eq_df_filt[["date", "ticker", "type", "value"]]
 
     price = get_subset_by_type(eq_df_filt, "Price Adjusted", "price")
     market_cap = get_subset_by_type(eq_df_filt, "Market Capitalization", "market_cap")
