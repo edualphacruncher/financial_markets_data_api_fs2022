@@ -7,6 +7,7 @@ from typing import Union
 from load.helpers import parse_yaml
 from load.load_equities import load_equity
 from load.load_factors import load_factor
+from load.load_indices import load_index
 
 config_dict = parse_yaml("config.yml")
 
@@ -43,6 +44,10 @@ def get(
             * date
             * ticker
             * value
+        * indices: pandas dataframe with the following columns
+            * date
+            * ticker
+            * total_return
     """
 
     if isinstance(ticker, str) or isinstance(ticker, list):
@@ -72,5 +77,7 @@ def get(
             ret_df = load_factor(
                 ticker, universe_route, frequency, date_start, date_end
             )
+        elif universe == "indices":
+            ret_df = load_index(ticker, universe_route, frequency, date_start, date_end)
 
         return ret_df
