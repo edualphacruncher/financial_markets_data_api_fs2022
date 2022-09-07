@@ -20,7 +20,7 @@ def get_ticker_info(ticker: list, universe_path: str):
         ticker_meta = {
             "name": df_filt.name.iloc[0],
             "start_date": df_filt.date.min(),
-            "end_date": df_filt.date.max(),
+            "last_date": df_filt.date.max(),
             "types": df_filt.type.unique().tolist(),
             "frequency": df_filt.frequency.unique().tolist(),
         }
@@ -39,7 +39,7 @@ def get_universe_info(universe_path: str):
 
     ret_dict = {
         "start_date": univ.date.min(),
-        "end_date": univ.date.max(),
+        "last_date": univ.date.max(),
         "tickers_no": len(univ.ticker.unique()),
     }
 
@@ -65,7 +65,7 @@ def get_all_ticker_info(universe_path: str):
     ).join(nobs, on=["ticker", "name"])
 
     joined_df = joined_df.reset_index().rename(
-        columns={"date": "nobs", "date_start": "start_date", "date_end": "end_date"}
+        columns={"date": "nobs", "date_start": "start_date", "date_end": "last_date"}
     )
 
     return joined_df
