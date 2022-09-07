@@ -9,7 +9,7 @@ from load.load_equities import load_equity
 from load.load_factors import load_factor
 from load.load_indices import load_index
 
-config_dict = parse_yaml("config.yml")
+CONFIG_DICT = parse_yaml("config.yml")
 
 
 def get(
@@ -26,6 +26,7 @@ def get(
     Arguments:
 
     ticker: string or list of strings
+    universe: string, possible values: "equities", "factors", "indices"
     frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
     date_start: string or datetime.date
     date_end: string or datetime.date
@@ -57,10 +58,10 @@ def get(
 
     if isinstance(ticker, str) or isinstance(ticker, list):
         try:
-            universe_route = config_dict[universe]
+            universe_route = CONFIG_DICT[universe]
         except KeyError:
             raise ValueError(
-                f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}"
+                f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
             )
     else:
         raise TypeError(
@@ -86,3 +87,90 @@ def get(
             ret_df = load_index(ticker, universe_route, frequency, date_start, date_end)
 
         return ret_df
+
+def set_config_path(path: str):
+    global CONFIG_DICT
+    try:
+        CONFIG_DICT = parse_yaml(path)
+    except:
+        print("Could not read your configuration file. Please check your file and the yml layout.")
+    return
+
+def ticker_info(
+    ticker: Union[str, list],
+    universe: str,
+    frequency: str = "daily",
+    **kwargs,
+):
+    
+    """
+    The function returns basic information for a given ticker or multiple tickers, from a given universe.
+
+    Arguments:
+
+    ticker: string or list of strings
+    universe: string, possible values: "equities", "factors", "indices"
+    frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
+    
+    Behaviour:
+    Prints information about the queried tickers.
+    
+    Information returned:
+    
+    name: the name corresponding to the product (if possible)
+    start_date: the first available data date for the given ticker
+    last_date: the last available data date for the given ticker
+    types: the available data types for the given ticker
+    
+    """
+    
+    return
+
+def universe_info(
+    universe: str,
+):
+    
+    """
+    The function returns basic information for a given universe.
+
+    Arguments:
+
+    universe: string, possible values: "equities", "factors", "indices"
+    
+    Behaviour:
+    Prints information about the queried universe.
+    
+    Information returned:
+    
+    start_date: the first available data date for the given universe
+    last_date: the last available data date for the given universe
+    tickers: the number of different tickers in the universe
+        
+    """
+    
+    return
+
+def ticker_list(
+    universe: str,
+):
+    
+    """
+    The function returns description of all tickers in a given universe.
+
+    Arguments:
+
+    universe: string, possible values: "equities", "factors", "indices"
+    
+    Behaviour:
+    returns a pandas.DataFrame object
+    
+    Information returned:
+    
+    name: name of the product
+    ticker: ticker of the product
+    start_date: the first available data point for the ticker
+    last_date: the last available data point for the ticker
+    nobs: number of data observations
+        
+    """
+    return

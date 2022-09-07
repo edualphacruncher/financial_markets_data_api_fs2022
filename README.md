@@ -1,80 +1,85 @@
-# Data query API for Financial Markets course at MIT Sloan
 
-The package provides a high-level API for interacting with various Financial data made available on Nuvolos for the Financial Markets course of Andrea Vedolin at MIT Sloan (Fall Semester, 2022).
+# Python Project Template
 
-The main functionality of the package is to load data from various data sources ("universes"):
+A low dependency and really simple to start project template for Python Projects.
 
+See also 
+- [Flask-Project-Template](https://github.com/rochacbruno/flask-project-template/) for a full feature Flask project including database, API, admin interface, etc.
+- [FastAPI-Project-Template](https://github.com/rochacbruno/fastapi-project-template/) The base to start an openapi project featuring: SQLModel, Typer, FastAPI, JWT Token Auth, Interactive Shell, Management Commands.
+
+### HOW TO USE THIS TEMPLATE
+
+> **DO NOT FORK** this is meant to be used from **[Use this template](https://github.com/rochacbruno/python-project-template/generate)** feature.
+
+1. Click on **[Use this template](https://github.com/rochacbruno/python-project-template/generate)**
+3. Give a name to your project  
+   (e.g. `my_awesome_project` recommendation is to use all lowercase and underscores separation for repo names.)
+3. Wait until the first run of CI finishes  
+   (Github Actions will process the template and commit to your new repo)
+4. If you want [codecov](https://about.codecov.io/sign-up/) Reports and Automatic Release to [PyPI](https://pypi.org)  
+  On the new repository `settings->secrets` add your `PYPI_API_TOKEN` and `CODECOV_TOKEN` (get the tokens on respective websites)
+4. Read the file [CONTRIBUTING.md](CONTRIBUTING.md)
+5. Then clone your new project and happy coding!
+
+> **NOTE**: **WAIT** until first CI run on github actions before cloning your new project.
+
+### What is included on this template?
+
+- 🖼️ Templates for starting multiple application types:
+  * **Basic low dependency** Python program (default) [use this template](https://github.com/rochacbruno/python-project-template/generate)
+  * **Flask** with database, admin interface, restapi and authentication [use this template](https://github.com/rochacbruno/flask-project-template/generate).
+  **or Run `make init` after cloning to generate a new project based on a template.**
+- 📦 A basic [setup.py](setup.py) file to provide installation, packaging and distribution for your project.  
+  Template uses setuptools because it's the de-facto standard for Python packages, you can run `make switch-to-poetry` later if you want.
+- 🤖 A [Makefile](Makefile) with the most useful commands to install, test, lint, format and release your project.
+- 📃 Documentation structure using [mkdocs](http://www.mkdocs.org)
+- 💬 Auto generation of change log using **gitchangelog** to keep a HISTORY.md file automatically based on your commit history on every release.
+- 🐋 A simple [Containerfile](Containerfile) to build a container image for your project.  
+  `Containerfile` is a more open standard for building container images than Dockerfile, you can use buildah or docker with this file.
+- 🧪 Testing structure using [pytest](https://docs.pytest.org/en/latest/)
+- ✅ Code linting using [flake8](https://flake8.pycqa.org/en/latest/)
+- 📊 Code coverage reports using [codecov](https://about.codecov.io/sign-up/)
+- 🛳️ Automatic release to [PyPI](https://pypi.org) using [twine](https://twine.readthedocs.io/en/latest/) and github actions.
+- 🎯 Entry points to execute your program using `python -m <_financial_markets_data_api_fs2022>` or `$ _financial_markets_data_api_fs2022` with basic CLI argument parsing.
+- 🔄 Continuous integration using [Github Actions](.github/workflows/) with jobs to lint, test and release your project on Linux, Mac and Windows environments.
+
+> Curious about architectural decisions on this template? read [ABOUT_THIS_TEMPLATE.md](ABOUT_THIS_TEMPLATE.md)  
+> If you want to contribute to this template please open an [issue](https://github.com/rochacbruno/python-project-template/issues) or fork and send a PULL REQUEST.
+
+[❤️ Sponsor this project](https://github.com/sponsors/rochacbruno/)
+
+<!--  DELETE THE LINES ABOVE THIS AND WRITE YOUR PROJECT README BELOW -->
+
+---
+# _financial_markets_data_api_fs2022
+
+[![codecov](https://codecov.io/gh/matek-alphacruncher/-financial_markets_data_api_fs2022/branch/main/graph/badge.svg?token=-financial_markets_data_api_fs2022_token_here)](https://codecov.io/gh/matek-alphacruncher/-financial_markets_data_api_fs2022)
+[![CI](https://github.com/matek-alphacruncher/-financial_markets_data_api_fs2022/actions/workflows/main.yml/badge.svg)](https://github.com/matek-alphacruncher/-financial_markets_data_api_fs2022/actions/workflows/main.yml)
+
+Awesome _financial_markets_data_api_fs2022 created by matek-alphacruncher
+
+## Install it from PyPI
+
+```bash
+pip install _financial_markets_data_api_fs2022
 ```
-my_data = get(ticker, universe, frequency, date_start, date_end)
+
+## Usage
+
+```py
+from _financial_markets_data_api_fs2022 import BaseClass
+from _financial_markets_data_api_fs2022 import base_function
+
+BaseClass().base_method()
+base_function()
 ```
 
-After the call `my_data` will contain a `pandas.DataFrame` object - if the query cannot find corresponding records, the DataFrame will be empty.
-
-## Coverage
-
-The package currently loads the following universes:
-
-* equities,
-* factors,
-* indices.
-
-## Modules
-
-### Equities universe
-
-In this universe the user can filter the database for tickers and will receive a pandas dataframe with the following structure:
-|date|ticker|price|market_cap|total_return|
-|:--:|:----:|:---:|:--------:|:----------:|
-
-Note, that the price corresponds to the adjusted price and is denominated in USD.
-
-### Factors universe
-
-In this universe the user can filter the database for factors. 
-* The factor's type can be either total return or excess return. 
-   * The `type` "Total return" only corresponds to the risk-free rate (ticker:rf).
-   * Every other factor the `type` is excess return. 
-
-The returned dataframe has the following structure:
-|date|ticker|value|
-|:--:|:----:|:---:|
-
-### Indices universe
-
-In this universe the user can obtain data regarding different indices that are in the database based on tickers. The returned dataframe has the following structure:
-|date|ticker|total_return|
-|:--:|:----:|:----------:|
-
-## UsageA
-
-### `get`
-
-The function returns the desired data for the given ticker, from a given universe.
-    The ticker can be given as a string, or a list of strings. If invalid ticker
-    is entered, the function will return and empty dataframe.
-    Frequency of the data can be specified by the frequency parameter, by default
-    daily data is returned. Other possible frequencies are weekly, monthly,
-    quarterly and yearly.
-    The start and end dates should be specified as datetime.date objects or in a
-    string format like '2020-01-01'.
-    List of available universe and returned data formats:
-        * equities: pandas dataframe with the following columns:
-            * date
-            * ticker
-            * price
-            * market_cap
-            * total_return
-            price and market_cap are denominated in USD
-        * factors: pandas dataframe with the following columns
-            * date
-            * ticker
-            * value
-        * indices: pandas dataframe with the following columns
-            * date
-            * ticker
-            * total_return
-
-Example code:
+```bash
+$ python -m _financial_markets_data_api_fs2022
+#or
+$ _financial_markets_data_api_fs2022
 ```
-data = nvdata.get(ticker='GOOGL', universe='equities', frequency='monthly', date_start='2010-01-01', date_end='2020-12-31')
-```
+
+## Development
+
+Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.

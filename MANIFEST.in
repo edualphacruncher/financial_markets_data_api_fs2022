@@ -1,0 +1,5 @@
+include LICENSE
+include HISTORY.md
+include Containerfile
+graft tests
+graft _financial_markets_data_api_fs2022
