@@ -138,10 +138,10 @@ def ticker_info(
 
     if isinstance(ticker, str) or isinstance(ticker, list):
         try:
-            universe_route = config_dict[universe]
+            universe_route = CONFIG_DICT[universe]
         except KeyError:
             raise ValueError(
-                f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}"
+                f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
             )
         else:
             raise TypeError(
@@ -177,10 +177,10 @@ def universe_info(
     """
 
     try:
-        universe_route = config_dict[universe]
+        universe_route = CONFIG_DICT[universe]
     except KeyError:
         raise ValueError(
-            f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}"
+            f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
         )
 
     ret_dict = get_universe_info(universe_route)
@@ -214,10 +214,10 @@ def ticker_list(
     """
 
     try:
-        universe_route = config_dict[universe]
+        universe_route = CONFIG_DICT[universe]
     except KeyError:
         raise ValueError(
-            f"Universe not found. Available universes: {[universe for universe in config_dict.keys()]}"
+            f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
         )
 
     ret_df = get_all_ticker_info(universe_route)
