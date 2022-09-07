@@ -50,24 +50,22 @@ def get_all_ticker_info(universe_path: str):
     """
     Info function to return infos on all tickers from one universe in a
     pd.DataFrame format.
-    TODO write faster function with groupby
     """
 
     univ = pd.read_feather(universe_path)
 
-    ret_dict = {}
-    for tick in univ.ticker.unique():
-        df_filt = univ[(univ.ticker == tick)]
-        ticker_meta = {
-            "name": df_filt.name.iloc[0],
-            "start_date": df_filt.date.min(),
-            "end_date": df_filt.date.max(),
-            "nobs": df_filt.shape[0],
-        }
+    grouped_df = eq_univ.groupby(["ticker", "name"])
 
-        ret_dict[tick] = ticker_meta
+    date_start = grouped_df[["date"]].min()
+    date_end = grouped_df[["date"]].max()
+    nobs = grouped_df[["date"]].count()
 
-    ret_df = pd.DataFrame.from_dict(ret_dict, orient="index")
-    ret_df = ret_df.reset_index().rename(columns={"index": "ticker"})
+    joined_df = date_start.join(
+        date_end, on=["ticker", "name"], lsuffix="_start", rsuffix="_end"
+    ).join(nobs, on=["ticker", "name"])
 
-    return ret_df
+    joined_df = joined_df.reset_index().rename(
+        columns={"date": "nobs", "date_start": "start_date", "date_end": "end_date"}
+    )
+
+    return joined_df
