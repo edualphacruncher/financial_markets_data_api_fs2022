@@ -7,8 +7,8 @@ def load_equity(
     ticker: list,
     universe_path: str,
     frequency: str,
-    date_start: Union[str, datetime.date],
-    date_end: Union[str, datetime.date],
+    start_date: Union[str, datetime.date],
+    end_date: Union[str, datetime.date],
 ):
     """
     Equity loading function that reads the data from files and returns them in
@@ -22,8 +22,8 @@ def load_equity(
 
     eq_df_filt = eq_univ[
         (eq_univ.ticker.isin(ticker))
-        & (eq_univ.date >= date_start)
-        & (eq_univ.date <= date_end)
+        & (eq_univ.date >= start_date)
+        & (eq_univ.date <= end_date)
         & (eq_univ.frequency == frequency)
         & (eq_univ.currency == "USD")
     ]

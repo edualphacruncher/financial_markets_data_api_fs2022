@@ -7,8 +7,8 @@ def load_factor(
     ticker: list,
     universe_path: str,
     frequency: str,
-    date_start: Union[str, datetime.date],
-    date_end: Union[str, datetime.date],
+    start_date: Union[str, datetime.date],
+    end_date: Union[str, datetime.date],
 ):
     """
     factor loading function that reads the data from files and returns them in
@@ -22,8 +22,8 @@ def load_factor(
 
     fact_df_filt = fact_univ[
         (fact_univ.ticker.isin(ticker))
-        & (fact_univ.date >= date_start)
-        & (fact_univ.date <= date_end)
+        & (fact_univ.date >= start_date)
+        & (fact_univ.date <= end_date)
         & (fact_univ.frequency == frequency)
     ]
 

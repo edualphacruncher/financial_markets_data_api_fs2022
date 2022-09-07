@@ -1,5 +1,5 @@
 import pandas as pd
-import datetime
+import datetimeimport
 from typing import Union
 
 
@@ -7,8 +7,8 @@ def load_index(
     ticker: list,
     universe_path: str,
     frequency: str,
-    date_start: Union[str, datetime.date],
-    date_end: Union[str, datetime.date],
+    start_date: Union[str, datetime.date],
+    end_date: Union[str, datetime.date],
 ):
     """
     Index loading function that reads the data from files and returns them in
@@ -23,8 +23,8 @@ def load_index(
 
     ind_df_filt = ind_univ[
         (ind_univ.ticker.isin(ticker))
-        & (ind_univ.date >= date_start)
-        & (ind_univ.date <= date_end)
+        & (ind_univ.date >= start_date)
+        & (ind_univ.date <= end_date)
         & (ind_univ.frequency == frequency)
         & (ind_univ.currency == "USD")
         & (ind_univ.type == "Total Return")

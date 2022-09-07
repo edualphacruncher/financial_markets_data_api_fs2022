@@ -19,15 +19,14 @@ except FileNotFoundError:
     print(
         f"The package couldn't locate a config.yml in its standard location. Please use the set_config_path() call to set a config.yml file location"
     )
-    
 
 
 def get(
     ticker: Union[str, list],
     universe: str,
     frequency: str = "daily",
-    date_start: Union[str, datetime.date] = "1980-01-01",
-    date_end: Union[str, datetime.date] = "2020-06-30",
+    start_date: Union[str, datetime.date] = "1980-01-01",
+    start_date: Union[str, datetime.date] = "2020-06-30",
     **kwargs,
 ):
     """
@@ -38,8 +37,8 @@ def get(
     ticker: string or list of strings
     universe: string, possible values: "equities", "factors", "indices"
     frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
-    date_start: string or datetime.date
-    date_end: string or datetime.date
+    start_date: string or datetime.date
+    start_date: string or datetime.date
 
     Behaviour:
     Returns a pandas.DataFrame object.
@@ -78,23 +77,25 @@ def get(
             "Invalid ticker type. Please enter the ticker(s) as a string or list of strings!"
         )
 
-    if isinstance(date_start, str):
-        date_start = parse(date_start).date()
+    if isinstance(start_date, str):
+        start_date = parse(start_date).date()
 
-    if isinstance(date_end, str):
-        date_end = parse(date_end).date()
+    if isinstance(start_date, str):
+        start_date = parse(start_date).date()
 
-    if isinstance(date_start, datetime.date) and isinstance(date_end, datetime.date):
+    if isinstance(start_date, datetime.date) and isinstance(start_date, datetime.date):
         if universe == "equities":
             ret_df = load_equity(
-                ticker, universe_route, frequency, date_start, date_end
+                ticker, universe_route, frequency, start_date, start_date
             )
         elif universe == "factors":
             ret_df = load_factor(
-                ticker, universe_route, frequency, date_start, date_end
+                ticker, universe_route, frequency, start_date, start_date
             )
         elif universe == "indices":
-            ret_df = load_index(ticker, universe_route, frequency, date_start, date_end)
+            ret_df = load_index(
+                ticker, universe_route, frequency, start_date, start_date
+            )
 
         return ret_df
 
@@ -143,10 +144,10 @@ def ticker_info(
             raise ValueError(
                 f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
             )
-        else:
-            raise TypeError(
-                "Invalid ticker type. Please enter the ticker(s) as a string or list of strings!"
-            )
+    else:
+        raise TypeError(
+            "Invalid ticker type. Please enter the ticker(s) as a string or list of strings!"
+        )
 
     ret_dict = get_ticker_info(ticker, universe_route)
 
