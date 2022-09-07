@@ -54,7 +54,7 @@ def get_all_ticker_info(universe_path: str):
 
     univ = pd.read_feather(universe_path)
 
-    grouped_df = eq_univ.groupby(["ticker", "name"])
+    grouped_df = univ.groupby(["ticker", "name"])
 
     date_start = grouped_df[["date"]].min()
     date_end = grouped_df[["date"]].max()
