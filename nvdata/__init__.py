@@ -9,7 +9,7 @@ from .load.load_equities import load_equity
 from .load.load_factors import load_factor
 from .load.load_indices import load_index
 
-from info import get_ticker_info, get_universe_info, get_all_ticker_info
+from .info import get_ticker_info, get_universe_info, get_all_ticker_info
 
 CONFIG_DICT = parse_yaml("config.yml")
 
