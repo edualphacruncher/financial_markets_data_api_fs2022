@@ -26,7 +26,7 @@ def get(
     universe: str,
     frequency: str = "daily",
     start_date: Union[str, datetime.date] = "1980-01-01",
-    start_date: Union[str, datetime.date] = "2020-06-30",
+    end_date: Union[str, datetime.date] = "2020-06-30",
     **kwargs,
 ):
     """
@@ -38,7 +38,7 @@ def get(
     universe: string, possible values: "equities", "factors", "indices"
     frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
     start_date: string or datetime.date
-    start_date: string or datetime.date
+    end_date: string or datetime.date
 
     Behaviour:
     Returns a pandas.DataFrame object.
@@ -80,22 +80,20 @@ def get(
     if isinstance(start_date, str):
         start_date = parse(start_date).date()
 
-    if isinstance(start_date, str):
-        start_date = parse(start_date).date()
+    if isinstance(end_date, str):
+        end_date = parse(end_date).date()
 
-    if isinstance(start_date, datetime.date) and isinstance(start_date, datetime.date):
+    if isinstance(start_date, datetime.date) and isinstance(end_date, datetime.date):
         if universe == "equities":
             ret_df = load_equity(
-                ticker, universe_route, frequency, start_date, start_date
+                ticker, universe_route, frequency, start_date, end_date
             )
         elif universe == "factors":
             ret_df = load_factor(
-                ticker, universe_route, frequency, start_date, start_date
+                ticker, universe_route, frequency, start_date, end_date
             )
         elif universe == "indices":
-            ret_df = load_index(
-                ticker, universe_route, frequency, start_date, start_date
-            )
+            ret_df = load_index(ticker, universe_route, frequency, start_date, end_date)
 
         return ret_df
 
