@@ -221,4 +221,4 @@ def ticker_list(
         )
 
     ret_df = get_all_ticker_info(universe_route)
-    return
+    return ret_df
