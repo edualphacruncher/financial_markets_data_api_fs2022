@@ -11,7 +11,15 @@ from .load.load_indices import load_index
 
 from .info import get_ticker_info, get_universe_info, get_all_ticker_info
 
-CONFIG_DICT = parse_yaml("config.yml")
+import os.path
+
+try:
+    CONFIG_DICT = parse_yaml("/files/data/config.yml")
+except FileNotFoundError:
+    print(
+        f"The package couldn't locate a config.yml in its standard location. Please use the set_config_path() call to set a config.yml file location"
+    )
+    
 
 
 def get(
