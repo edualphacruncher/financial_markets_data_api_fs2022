@@ -21,13 +21,18 @@ def get(
     **kwargs,
 ):
     """
-    The function returns the desired data for the given ticker, from a given universe.
-    The ticker can be given as a string, or a list of strings. If invalid ticker
-    is entered, the function will return and empty dataframe.
+    The function returns data for a given ticker or multiple tickers, from a given universe.
 
-    Frequency of the data can be specified by the frequency parameter, by default
-    daily data is returned. Other possible frequencies are weekly, monthly,
-    quarterly and yearly.
+    Arguments:
+
+    ticker: string or list of strings
+    frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
+    date_start: string or datetime.date
+    date_end: string or datetime.date
+
+    Behaviour:
+    Returns a pandas.DataFrame object.
+    If no tickers are valid, then the returned object is empty.
 
     The start and end dates should be specified as datetime.date objects or in a
     string format like '2020-01-01'.

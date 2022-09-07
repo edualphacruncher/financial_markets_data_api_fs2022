@@ -1,14 +1,27 @@
 # Data query API for Financial Markets course at MIT Sloan
 
-This package provides tools for straightforward data loading from specified universes.
-With the get function the user can specify the tickers, universe, frequency and date range and will get a pandas dataframe as a result.
-The package currently have three modules to load three different universe:
-* equities
-* factors
+The package provides a high-level API for interacting with various Financial data made available on Nuvolos for the Financial Markets course of Andrea Vedolin at MIT Sloan (Fall Semester, 2022).
+
+The main functionality of the package is to load data from various data sources ("universes"):
+
+```
+my_data = get(ticker, universe, frequency, date_start, date_end)
+```
+
+After the call `my_data` will contain a `pandas.DataFrame` object - if the query cannot find corresponding records, the DataFrame will be empty.
+
+## Coverage
+
+The package currently loads the following universes:
+
+* equities,
+* factors,
 * indices.
 
 ## Modules
+
 ### Equities universe
+
 In this universe the user can filter the database for tickers and will receive a pandas dataframe with the following structure:
 |date|ticker|price|market_cap|total_return|
 |:--:|:----:|:---:|:--------:|:----------:|
@@ -16,33 +29,50 @@ In this universe the user can filter the database for tickers and will receive a
 Note, that the price corresponds to the adjusted price and is denominated in USD.
 
 ### Factors universe
-In this universe the user can filter the database for factors. The factor's type can be either total return or excess return. Total return only corresponds to the risk-free rate (ticker:rf), for evert factor the type is excess return. The returned dataframe has the following structure:
+
+In this universe the user can filter the database for factors. 
+* The factor's type can be either total return or excess return. 
+   * The `type` "Total return" only corresponds to the risk-free rate (ticker:rf).
+   * Every other factor the `type` is excess return. 
+
+The returned dataframe has the following structure:
 |date|ticker|value|
 |:--:|:----:|:---:|
 
 ### Indices universe
+
 In this universe the user can obtain data regarding different indices that are in the database based on tickers. The returned dataframe has the following structure:
 |date|ticker|total_return|
 |:--:|:----:|:----------:|
 
-## Usage
-### Get function
-The get function has 5 parameters:
-* ticker
-* universe
-* frequency
-* date_start
-* date_end.
+## UsageA
 
-The ticker can be a string or a list of strings that exist in the given universe. In case the ticker does not exist, the function will return an empty dataframe.
+### `get`
 
-The universe should be selected from the above presented list and entered as a string.
-
-The frequency can vary from daily to yearly in different sequences based on the universe. For more details see the error message if wrong frequency is entered. By default the frequency is set daily.
-
-Date_start and date_end corresponds to the range in between the data is required. It can be a datetime.date or string format. If the database contains no avaialable data for the given period, an empty dataframe is returned.
-
-The config file contains the source of the data files that contains all info about a universe. By default that folder is in the same hieararcy level as the working folder and called *data*. In case the user wants to specify otherwise, changes in the config file are required.
+The function returns the desired data for the given ticker, from a given universe.
+    The ticker can be given as a string, or a list of strings. If invalid ticker
+    is entered, the function will return and empty dataframe.
+    Frequency of the data can be specified by the frequency parameter, by default
+    daily data is returned. Other possible frequencies are weekly, monthly,
+    quarterly and yearly.
+    The start and end dates should be specified as datetime.date objects or in a
+    string format like '2020-01-01'.
+    List of available universe and returned data formats:
+        * equities: pandas dataframe with the following columns:
+            * date
+            * ticker
+            * price
+            * market_cap
+            * total_return
+            price and market_cap are denominated in USD
+        * factors: pandas dataframe with the following columns
+            * date
+            * ticker
+            * value
+        * indices: pandas dataframe with the following columns
+            * date
+            * ticker
+            * total_return
 
 Example code:
 ```
