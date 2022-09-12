@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 from typing import Union
 
+from ..info import INVERSE_TYPE_CODES, INVERSE_FREQUENCY_CODES
 
 def load_index(
     ticker: list,
@@ -25,7 +26,7 @@ def load_index(
         (ind_univ.ticker.isin(ticker))
         & (ind_univ.date >= start_date)
         & (ind_univ.date <= end_date)
-        & (ind_univ.frequency == frequency)
+        & (ind_univ.frequency == INVERSE_FREQUENCY_CODES[frequency])
         & (ind_univ.currency == "USD")
         & (ind_univ.type == "Total Return")
     ]

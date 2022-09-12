@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 from typing import Union
 
+from ..info import INVERSE_TYPE_CODES, INVERSE_FREQUENCY_CODES
 
 def load_equity(
     ticker: list,
@@ -24,7 +25,7 @@ def load_equity(
         (eq_univ.ticker.isin(ticker))
         & (eq_univ.date >= start_date)
         & (eq_univ.date <= end_date)
-        & (eq_univ.frequency == frequency)
+        & (eq_univ.frequency == INVERSE_FREQUENCY_CODES[frequency])
         & (eq_univ.currency == "USD")
     ]
 
@@ -47,7 +48,7 @@ def get_subset_by_type(df, datatype, col_name):
     Returns a subset of the dataframe for only one type, with renamed columns.
     """
 
-    ret_df = df[df.type == datatype].reset_index(drop=True)
+    ret_df = df[df.type == INVERSE_TYPE_CODES[datatype]].reset_index(drop=True)
     ret_df.rename(columns={"value": col_name}, inplace=True)
     ret_df = ret_df.drop(columns=["type"])
 

@@ -1,15 +1,63 @@
 import pandas as pd
+from typing import List
+
+TYPE_CODES = {
+            "pu": "Price Unadjusted",
+            "tr": "Total Return",
+            "rwd": "Return without Dividends",
+            "mc": "Market Capitalization",
+            "tv": "Trading Volume",
+            "so": "Shares Outstanding",
+            "pa": "Price Adjusted",
+            "er": "Excess Return"
+}
+
+INVERSE_TYPE_CODES = {
+    "Price Unadjusted": "pu",
+    "Total Return": "tr",
+    "Excess Return": "er",
+    "Return without Dividends": "rwd",
+    "Market Capitalization": "mc",
+    "Trading Volume": "tv",
+    "Shares Outstanding": "so",
+    "Price Adjusted": "pa" 
+}
+
+FREQUENCY_CODES = {
+            "m": "monthly",
+            "d": "daily",
+            "w": "weekly",
+            "q": "quarterly",
+            "y": "yearly"
+}
+
+INVERSE_FREQUENCY_CODES = {
+            "monthly": "m",
+            "daily": "d",
+            "weekly": "w",
+            "quarterly": "q",
+            "yearly": "y"
+}
 
 
-def get_ticker_info(ticker: list, universe_path: str):
+
+def convert_type_code(type_list: List[str]):
+    return [TYPE_CODES[t] for t in type_list]
+
+
+def convert_frequency_code(frequency_list: List[str]):
+    return [FREQUENCY_CODES[f] for f in frequency_list]
+
+
+def get_ticker_info(ticker: list, universe_metadata_path: str):
 
     """
     Info function that returns the basic information on the given ticker.
     Tha same function is used for all the universes as they have similar format.
     """
 
-    univ = pd.read_feather(universe_path)
-    univ = univ[(univ.currency == "USD") & (univ.type == "Total Return")]
+    univ = pd.read_feather(universe_metadata_path)
+    univ = univ[(univ.type == "tr")]
 
     if isinstance(ticker, str):
         ticker = [ticker]
@@ -19,10 +67,10 @@ def get_ticker_info(ticker: list, universe_path: str):
         df_filt = univ[(univ.ticker == tick)]
         ticker_meta = {
             "name": df_filt.name.iloc[0],
-            "start_date": df_filt.date.min(),
-            "last_date": df_filt.date.max(),
-            "types": df_filt.type.unique().tolist(),
-            "frequency": df_filt.frequency.unique().tolist(),
+            "start_date": df_filt.min_date.iloc[0],
+            "last_date": df_filt.max_date.iloc[0],
+            "types": convert_type_code(df_filt.type.unique().tolist()),
+            "frequency": convert_frequency_code(df_filt.frequency.unique().tolist()),
         }
 
         ret_dict[tick] = ticker_meta
@@ -30,42 +78,28 @@ def get_ticker_info(ticker: list, universe_path: str):
     return ret_dict
 
 
-def get_universe_info(universe_path: str):
+def get_universe_info(universe_metadata_path: str):
     """
     Info function to return universe info.
     """
 
-    univ = pd.read_feather(universe_path)
+    univ = pd.read_feather(universe_metadata_path)
 
     ret_dict = {
-        "start_date": univ.date.min(),
-        "last_date": univ.date.max(),
+        "start_date": univ.min_date.min(),
+        "last_date": univ.max_date.max(),
         "tickers_no": len(univ.ticker.unique()),
     }
 
     return ret_dict
 
 
-def get_all_ticker_info(universe_path: str):
+def get_all_ticker_info(universe_metadata_path: str):
     """
     Info function to return infos on all tickers from one universe in a
     pd.DataFrame format.
     """
 
-    univ = pd.read_feather(universe_path)
+    univ = pd.read_feather(universe_metadata_path)
 
-    grouped_df = univ.groupby(["ticker", "name"])
-
-    date_start = grouped_df[["date"]].min()
-    date_end = grouped_df[["date"]].max()
-    nobs = grouped_df[["date"]].count()
-
-    joined_df = date_start.join(
-        date_end, on=["ticker", "name"], lsuffix="_start", rsuffix="_end"
-    ).join(nobs, on=["ticker", "name"])
-
-    joined_df = joined_df.reset_index().rename(
-        columns={"date": "nobs", "date_start": "start_date", "date_end": "last_date"}
-    )
-
-    return joined_df
+    return univ

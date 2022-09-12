@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 from typing import Union
 
+from ..info import INVERSE_TYPE_CODES, INVERSE_FREQUENCY_CODES
 
 def load_factor(
     ticker: list,
@@ -24,7 +25,7 @@ def load_factor(
         (fact_univ.ticker.isin(ticker))
         & (fact_univ.date >= start_date)
         & (fact_univ.date <= end_date)
-        & (fact_univ.frequency == frequency)
+        & (fact_univ.frequency == INVERSE_FREQUENCY_CODES[frequency])
     ]
 
     fact_df_filt = fact_df_filt[["date", "ticker", "value"]]

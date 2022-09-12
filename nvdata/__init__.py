@@ -2,7 +2,7 @@ import pandas as pd
 
 import datetime
 from dateutil.parser import parse
-from typing import Union
+from typing import Union, List
 
 from .load.helpers import parse_yaml
 from .load.load_equities import load_equity
@@ -22,11 +22,11 @@ except FileNotFoundError:
 
 
 def get(
-    ticker: Union[str, list],
+    ticker: Union[str, List[str]],
     universe: str,
-    frequency: str = "daily",
+    frequency: str = "monthly",
     start_date: Union[str, datetime.date] = "1980-01-01",
-    end_date: Union[str, datetime.date] = "2020-06-30",
+    end_date: Union[str, datetime.date] = "2022-07-31",
     **kwargs,
 ):
     """
@@ -67,7 +67,7 @@ def get(
 
     if isinstance(ticker, str) or isinstance(ticker, list):
         try:
-            universe_route = CONFIG_DICT[universe]
+            universe_route = CONFIG_DICT[universe]["series"]
         except KeyError:
             raise ValueError(
                 f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
@@ -110,7 +110,7 @@ def set_config_path(path: str):
 
 
 def ticker_info(
-    ticker: Union[str, list],
+    ticker: Union[str, List[str]],
     universe: str,
     **kwargs,
 ):
@@ -137,7 +137,7 @@ def ticker_info(
 
     if isinstance(ticker, str) or isinstance(ticker, list):
         try:
-            universe_route = CONFIG_DICT[universe]
+            universe_route = CONFIG_DICT[universe]["metadata"]
         except KeyError:
             raise ValueError(
                 f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
@@ -176,7 +176,7 @@ def universe_info(
     """
 
     try:
-        universe_route = CONFIG_DICT[universe]
+        universe_route = CONFIG_DICT[universe]["metadata"]
     except KeyError:
         raise ValueError(
             f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
@@ -211,9 +211,9 @@ def ticker_list(
     nobs: number of data observations
 
     """
-
+    
     try:
-        universe_route = CONFIG_DICT[universe]
+        universe_route = CONFIG_DICT[universe]["metadata"]
     except KeyError:
         raise ValueError(
             f"Universe not found. Available universes: {[universe for universe in CONFIG_DICT.keys()]}"
