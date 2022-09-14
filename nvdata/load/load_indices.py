@@ -28,7 +28,7 @@ def load_index(
         & (ind_univ.date <= end_date)
         & (ind_univ.frequency == INVERSE_FREQUENCY_CODES[frequency])
         & (ind_univ.currency == "USD")
-        & (ind_univ.type == "Total Return")
+        & (ind_univ.type == INVERSE_TYPE_CODES["Total Return"])
     ]
 
     ind_df_filt = ind_df_filt[["date", "ticker", "type", "value"]]

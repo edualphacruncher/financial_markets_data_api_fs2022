@@ -59,7 +59,6 @@ def get_ticker_info(ticker: list, universe_metadata_path: str):
     """
 
     univ = pd.read_feather(universe_metadata_path)
-    univ = univ[(univ.type == "tr")]
 
     if isinstance(ticker, str):
         ticker = [ticker]
@@ -68,9 +67,9 @@ def get_ticker_info(ticker: list, universe_metadata_path: str):
     for tick in ticker:
         df_filt = univ[(univ.ticker == tick)]
         ticker_meta = {
-            "name": df_filt.name.iloc[0],
-            "start_date": df_filt.min_date.iloc[0],
-            "last_date": df_filt.max_date.iloc[0],
+            "name": df_filt.name.iloc[0,0],
+            "start_date": df_filt.min_date.min(),
+            "last_date": df_filt.max_date.max(),
             "types": convert_type_code(df_filt.type.unique().tolist()),
             "frequency": convert_frequency_code(df_filt.frequency.unique().tolist()),
         }
