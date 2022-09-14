@@ -70,8 +70,8 @@ def get_ticker_info(ticker: list, universe_metadata_path: str):
             "name": df_filt.name.iloc[0],
             "start_date": df_filt.min_date.min(),
             "last_date": df_filt.max_date.max(),
-            "types": convert_type_code(df_filt.type.unique().tolist()),
-            "frequency": convert_frequency_code(df_filt.frequency.unique().tolist()),
+            "types": df_filt.type.unique().tolist(),
+            "frequency": df_filt.frequency.unique().tolist(),
         }
 
         ret_dict[tick] = ticker_meta
