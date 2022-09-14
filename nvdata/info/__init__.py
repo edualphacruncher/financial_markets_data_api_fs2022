@@ -44,11 +44,11 @@ INVERSE_FREQUENCY_CODES = {
 
 
 def convert_type_code(type_list: List[str]):
-    return [TYPE_CODES[t] for t in type_list]
+    return [INVERSE_TYPE_CODES[t] for t in type_list]
 
 
 def convert_frequency_code(frequency_list: List[str]):
-    return [FREQUENCY_CODES[f] for f in frequency_list]
+    return [INVERSE_FREQUENCY_CODES[f] for f in frequency_list]
 
 
 def get_ticker_info(ticker: list, universe_metadata_path: str):
