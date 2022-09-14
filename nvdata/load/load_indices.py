@@ -31,8 +31,7 @@ def load_index(
         & (ind_univ.type == "Total Return")
     ]
 
-    ind_df_filt = ind_df_filt[["date", "ticker", "value"]]
-    ind_df_filt = ind_df_filt.rename(columns={"value": "total_return"})
+    ind_df_filt = ind_df_filt[["date", "ticker", "type", "value"]]
     ind_df_filt = ind_df_filt.reset_index(drop=True)
 
     return ind_df_filt

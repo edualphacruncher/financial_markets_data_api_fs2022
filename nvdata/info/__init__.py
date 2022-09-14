@@ -9,7 +9,8 @@ TYPE_CODES = {
             "tv": "Trading Volume",
             "so": "Shares Outstanding",
             "pa": "Price Adjusted",
-            "er": "Excess Return"
+            "er": "Excess Return",
+            "trh": "Total Return Hedged"
 }
 
 INVERSE_TYPE_CODES = {
@@ -20,7 +21,8 @@ INVERSE_TYPE_CODES = {
     "Market Capitalization": "mc",
     "Trading Volume": "tv",
     "Shares Outstanding": "so",
-    "Price Adjusted": "pa" 
+    "Price Adjusted": "pa",
+    "Total Return Hedged": "trh"
 }
 
 FREQUENCY_CODES = {
