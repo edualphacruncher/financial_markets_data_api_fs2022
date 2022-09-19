@@ -27,6 +27,7 @@ def get(
     frequency: str = "monthly",
     start_date: Union[str, datetime.date] = "1980-01-01",
     end_date: Union[str, datetime.date] = "2022-07-31",
+    reticulate: bool = False,
     **kwargs,
 ):
     """
@@ -39,6 +40,7 @@ def get(
     frequency: string, possible values: "daily", "weekly", "monthly", "quarterly", "yearly".
     start_date: string or datetime.date
     end_date: string or datetime.date
+    reticulate: boolean, by default False
 
     Behaviour:
     Returns a pandas.DataFrame object.
@@ -95,7 +97,11 @@ def get(
         elif universe == "indices":
             ret_df = load_index(ticker, universe_route, frequency, start_date, end_date)
 
-        return ret_df
+    
+    if reticulate == True:
+            ret_df["date"] = ret_df["date"].apply(lambda x: x.strftime("%Y-%m-%d"))
+    
+    return ret_df
 
 
 def set_config_path(path: str):
