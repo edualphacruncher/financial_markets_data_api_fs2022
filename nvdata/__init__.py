@@ -195,6 +195,7 @@ def universe_info(
 
 def ticker_list(
     universe: str,
+    reticulate: bool = False,
     **kwargs,
 ):
 
@@ -226,4 +227,7 @@ def ticker_list(
         )
 
     ret_df = get_all_ticker_info(universe_route)
+    if reticulate == True:
+            ret_df["min_date"] = ret_df["min_date"].apply(lambda x: x.strftime("%Y-%m-%d"))
+            ret_df["max_date"] = ret_df["max_date"].apply(lambda x: x.strftime("%Y-%m-%d"))
     return ret_df
