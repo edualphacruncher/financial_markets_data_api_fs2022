@@ -37,7 +37,7 @@ Then:
 ```
 library(reticulate)
 nd <- reticulate::import("nvdata")
-amzn <- nd.get("AMZN/84788", "equities", "monthly", start_date = "1999-01-01", end_date = "2018-12-31", reticulate =T)
+amzn <- nd$get("AMZN/84788", "equities", "monthly", start_date = "1999-01-01", end_date = "2018-12-31", reticulate =T)
 ```
 to get the same data frame but now in an R environment. Note the final parameter `reticulate` to the `get()` call! This is required to resolve datatype casting issues that exist between `datetime.date()` and R date objects.
 
