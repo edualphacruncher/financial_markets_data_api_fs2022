@@ -98,7 +98,7 @@ def get(
             ret_df = load_index(ticker, universe_route, frequency, start_date, end_date)
             
         elif universe == "treasuries":
-            ret_df = load_index(ticker, universe_route, frequency, start_date, end_date)
+            ret_df = load_treasury_yc(ticker, universe_route, frequency, start_date, end_date)
 
     
     if reticulate == True:
