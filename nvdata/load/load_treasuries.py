@@ -31,7 +31,7 @@ def load_treasury_yc(
         & (tr_univ.type == INVERSE_TYPE_CODES["Yield-to-Maturity"])
     ]
 
-    tr_df_filt = ind_df_filt[["date", "ticker", "type", "value"]]
-    tr_df_filt = ind_df_filt.reset_index(drop=True)
+    tr_df_filt = tr_df_filt[["date", "ticker", "type", "value"]]
+    tr_df_filt = tr_df_filt.reset_index(drop=True)
 
     return tr_df_filt
